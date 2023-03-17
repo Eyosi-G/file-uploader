@@ -9,10 +9,10 @@ const api = Router()
 const fileuploadService = new FileUploadService()
 const fileuploadController = new FileUploadController(fileuploadService)
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
+    destination: (req: any, file: any, cb: any) => {
         cb(null, 'uploads')
     },
-    filename: (req, file: any, cb: any) => {
+    filename: (req: any, file: any, cb: any) => {
         const name = `${v4()}${extname(file.originalname)}`
         cb(null, name)
     }
@@ -27,7 +27,7 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
     cb(new Error(`${file.mimetype} is not allowed`))
 }
 
-const maxSize = 10 * 1048576
+const maxSize = 10485760 //10 mb
 const upload = multer({ storage: storage, fileFilter: fileFilter, limits: { fileSize: maxSize} });
 
 api.post("/", upload.single("image"), fileuploadController.uploadFile)
